@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Gallery</title>
+    <style>
+        /* 페이지 및 검색창 스타일 */
+        body {
+            background-color: #1c1c1c;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 헤더 스타일 */
+        .header {
+            width: 100%;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 1em;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-item {
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: background-color 0.3s ease;
+            width: 20%;
+            text-align: center;
+        }
+
+        .header-item:hover {
+            background-color: #555;
+            border-radius: 5px;
+        }
+
+        /* 콘텐츠 섹션 스타일 */
+        .content {
+            padding-top: 80px; /* 헤더 높이 보정 */
+            width: 100%;
+            max-width: 1200px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        /* 타이틀 스타일 */
+        .title {
+            color: #ffffff;
+            font-size: 3em;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            animation: tracking-in-contract-bck-bottom 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+        }
+
+        /* 검색창 스타일 */
+        .search-container {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            padding: 10px;
+            font-size: 16px;
+            width: 300px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        /* 갤러리 스타일 */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .gallery-item {
+            width: 300px;
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #444;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+        }
+
+        .gallery-item.show {
+            opacity: 1;
+            animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .gallery-text {
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .gallery-item:hover .gallery-text {
+            opacity: 1;
+        }
+
+        /* 애니메이션 정의 */
+        @keyframes tracking-in-expand {
+            0% { letter-spacing: -0.5em; opacity: 0; }
+            40% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes tracking-in-contract-bck-bottom {
+            0% { letter-spacing: 1em; transform: translateZ(400px) translateY(300px); opacity: 0; }
+            40% { opacity: 0.6; }
+            100% { transform: translateZ(0) translateY(0); opacity: 1; }
+        }
+
+        /* 미디어 쿼리 (모바일 화면) */
+        @media (max-width: 768px) {
+            .gallery {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .gallery-item {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <div class="header">
+        <div class="header-item">Menu 1</div>
+        <div class="header-item">Menu 2</div>
+        <div class="header-item">Menu 3</div>
+        <div class="header-item">Menu 4</div>
+        <div class="header-item">Menu 5</div>
+    </div>
+
+    <!-- 콘텐츠 영역 -->
+    <div class="content">
+        <!-- 타이틀 -->
+        <h1 class="title">Art Gallery</h1>
+
+        <!-- 검색창 -->
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search artwork..." oninput="filterGallery()">
+        </div>
+
+        <!-- 갤러리 -->
+        <div class="gallery">
+            <div class="gallery-item show" data-title="Sunset Landscape" data-description="A beautiful sunset over the mountains.">
+                <img src="https://via.placeholder.com/300" alt="Sunset Landscape" class="gallery-image">
+                <h3>Sunset Landscape</h3>
+                <p class="gallery-text">A beautiful sunset over the mountains.</p>
+            </div>
+            <div class="gallery-item show" data-title="Abstract Art" data-description="A vibrant piece of abstract art.">
+                <img src="https://via.placeholder.com/300" alt="Abstract Art" class="gallery-image">
+                <h3>Abstract Art</h3>
+                <p class="gallery-text">A vibrant piece of abstract art.</p>
+            </div>
+            <div class="gallery-item show" data-title="City Lights" data-description="Cityscape with stunning night lights.">
+                <img src="https://via.placeholder.com/300" alt="City Lights" class="gallery-image">
+                <h3>City Lights</h3>
+                <p class="gallery-text">Cityscape with stunning night lights.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 검색어 필터링 기능 구현
+        function filterGallery() {
+            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+            const galleryItems = document.querySelectorAll('.gallery-item');
+
+            galleryItems.forEach(item => {
+                const title = item.getAttribute('data-title').toLowerCase();
+                const description = item.getAttribute('data-description').toLowerCase();
+
+                if (searchTerm === '' || title.includes(searchTerm) || description.includes(searchTerm)) {
+                    item.style.display = 'block';
+                    item.classList.add('show');
+                } else {
+                    item.style.display = 'none';
+                    item.classList.remove('show');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
