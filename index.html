@@ -201,6 +201,10 @@
     </div>
 
     <script>
+        // 페이지 로드 시 스크롤을 맨 위로 이동
+        window.onload = function() {
+            window.scrollTo(0, 0); // 페이지가 로드되면 스크롤을 맨 위로 이동
+        };
         // 검색어 필터링 기능 구현
         function filterGallery() {
             const searchTerm = document.querySelector('.search-input').value.toLowerCase();
